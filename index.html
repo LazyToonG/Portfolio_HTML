@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — LazyToonG</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap');
+
+  :root[data-theme="dark"] {
+    --bg: #0d0d14;
+    --bg2: #13131f;
+    --bg3: #1a1a2e;
+    --border: #2a2a45;
+    --accent: #8b5cf6;
+    --accent2: #a78bfa;
+    --accent3: #c4b5fd;
+    --text: #e2e0f0;
+    --text-muted: #8b89a8;
+    --text-dim: #5a5875;
+    --code-bg: #0f0f1a;
+    --tag-bg: #1e1b3a;
+    --card-shadow: 0 4px 32px rgba(139,92,246,0.10);
+    --glow: 0 0 40px rgba(139,92,246,0.18);
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f5f3ff;
+    --bg2: #ffffff;
+    --bg3: #ede9fe;
+    --border: #ddd6fe;
+    --accent: #7c3aed;
+    --accent2: #6d28d9;
+    --accent3: #5b21b6;
+    --text: #1e1b4b;
+    --text-muted: #6d28d9;
+    --text-dim: #9ca3af;
+    --code-bg: #f0ebff;
+    --tag-bg: #ede9fe;
+    --card-shadow: 0 4px 24px rgba(124,58,237,0.10);
+    --glow: 0 0 30px rgba(124,58,237,0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 100;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .sidebar-header {
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar-logo span { color: var(--text); font-weight: 700; }
+
+  .sidebar-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+  .sidebar-nav::-webkit-scrollbar { width: 3px; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-dim);
+    padding: 12px 20px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    user-select: none;
+  }
+  .nav-item:hover {
+    background: var(--bg3);
+    color: var(--text);
+    border-left-color: var(--border);
+  }
+  .nav-item.active {
+    background: var(--tag-bg);
+    color: var(--accent2);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+  .nav-item .badge {
+    margin-left: auto;
+    font-size: 10px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 20px;
+    padding: 1px 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .github-link {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .github-link:hover { color: var(--accent2); }
+
+  /* Theme toggle */
+  .theme-toggle {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+  }
+  .theme-toggle:hover { background: var(--tag-bg); color: var(--accent2); border-color: var(--accent); }
+  .theme-toggle .toggle-label { font-size: 11px; font-family: 'Inter', sans-serif; }
+
+  /* ── Main ── */
+  .main {
+    margin-left: 260px;
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition: background 0.3s;
+  }
+  .topbar .crumb-active { color: var(--accent2); }
+  .topbar .sep { color: var(--border); }
+
+  /* ── Content panels ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .content {
+    padding: 40px;
+    max-width: 860px;
+  }
+
+  /* ── Hero (Présentation) ── */
+  .hero {
+    padding: 48px 40px 40px;
+  }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-role {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+  .hero-desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    max-width: 620px;
+    margin-bottom: 32px;
+  }
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--accent3);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+
+  /* ── Section content ── */
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .page-subtitle::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  p {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2::before {
+    content: '▍';
+    color: var(--accent);
+    font-size: 14px;
+  }
+
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 16px 0 8px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--accent);
+    background: var(--bg3);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+  li {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.8;
+    margin-bottom: 4px;
+  }
+  li::marker { color: var(--accent); }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--accent3);
+    box-shadow: var(--card-shadow);
+  }
+
+  code:not(pre code) {
+    background: var(--tag-bg);
+    color: var(--accent2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12.5px;
+  }
+
+  strong { color: var(--accent2); font-weight: 600; }
+
+  .info-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    box-shadow: var(--card-shadow);
+  }
+
+  /* SAE cards in sommaire */
+  .sae-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .sae-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: var(--card-shadow);
+  }
+  .sae-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--glow);
+    transform: translateY(-2px);
+  }
+  .sae-card .sae-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .sae-card .sae-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .sae-card .sae-sem {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* Semester separator */
+  .sem-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sem-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Strengths / weaknesses placeholder */
+  .placeholder-box {
+    background: var(--bg3);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 220px; min-width: 220px; }
+    .main { margin-left: 220px; }
+    .hero-name { font-size: 36px; }
+    .content, .hero { padding: 24px 20px; }
+    .sae-grid { grid-template-columns: 1fr; }
+    .topbar { padding: 12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">✦ <span>LazyToonG</span></div>
+    <div class="sidebar-sub">BUT Informatique · S4 · Villetaneuse</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Profil</div>
+    <div class="nav-item active" data-target="presentation">
+      <span>👤</span> Présentation
+    </div>
+    <div class="nav-item" data-target="sommaire">
+      <span>📋</span> Sommaire
+    </div>
+
+    <div class="nav-section-label">Semestre 1</div>
+    <div class="nav-item" data-target="s101">
+      <span>🐍</span> S1.01 — Implémentation
+    </div>
+    <div class="nav-item" data-target="s102">
+      <span>⏱</span> S1.02 — Comparaison d'algos
+    </div>
+    <div class="nav-item" data-target="s103">
+      <span>🖥</span> S1.03 — Installation de poste
+    </div>
+    <div class="nav-item" data-target="s104">
+      <span>🗄</span> S1.04 — Création d'une BD
+    </div>
+    <div class="nav-item" data-target="s105">
+      <span>📊</span> S1.05 — Recueil de besoins
+    </div>
+    <div class="nav-item" data-target="s106">
+      <span>🌱</span> S1.06 — Environnement éco.
+    </div>
+
+    <div class="nav-section-label">Semestre 2</div>
+    <div class="nav-item" data-target="s201">
+      <span>♟</span> S2.01 — Développement app
+    </div>
+    <div class="nav-item" data-target="s205">
+      <span>📅</span> S2.05 — Gestion de projet
+    </div>
+
+    <div class="nav-section-label">Semestre 3</div>
+    <div class="nav-item" data-target="s301">
+      <span>🎵</span> S3.01 — Développement app
+      <span class="badge">Flask</span>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <a href="https://github.com/LazyToonG/Portfolio" target="_blank" class="github-link">
+      ⬡ GitHub
+    </a>
+    <button class="theme-toggle" id="themeToggle">
+      <span id="themeIcon">☀</span>
+      <span class="toggle-label" id="themeLabel">Clair</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+  <div class="topbar">
+    <span>Portfolio</span>
+    <span class="sep">/</span>
+    <span class="crumb-active" id="breadcrumb">Présentation</span>
+  </div>
+
+  <!-- ── Présentation ── -->
+  <div class="panel active" id="panel-presentation">
+    <div class="hero">
+      <div class="hero-eyebrow">// Portfolio universitaire</div>
+      <div class="hero-name">LazyToonG</div>
+      <div class="hero-role">Étudiant en BUT Informatique · Université Sorbonne Paris Nord</div>
+      <p class="hero-desc">
+        Bonjour, je suis actuellement étudiant à l'Université Villetaneuse Paris Nord, en formation de BUT Informatique, en deuxième année, après l'obtention de mon bac STI2D durant le parcours 2023‑2024 avec la mention assez bien. Je m'intéresse particulièrement aux différents langages de programmation tels que Java, Python, JavaScript, SQL, et bien d'autres.
+      </p>
+      <p class="hero-desc">
+        Je suis toujours très à l'écoute et je fais de mon mieux pour comprendre les explications qui me sont données afin d'être à la hauteur des attentes. Je reste motivé et prêt à apprendre continuellement pour progresser dans ce domaine qui me passionne.
+      </p>
+      <div class="hero-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Java</span>
+        <span class="tag">Flask</span>
+        <span class="tag">SQL / SQLite</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">HTML / CSS</span>
+        <span class="tag">Linux</span>
+        <span class="tag">Git / GitHub</span>
+        <span class="tag">SSH / rsync</span>
+        <span class="tag">Raspberry Pi</span>
+      </div>
+
+      <hr style="margin-top: 36px;">
+
+      <h2>Points forts</h2>
+      <div class="placeholder-box">À compléter dans le portfolio</div>
+
+      <h2>Points faibles</h2>
+      <div class="placeholder-box">À compléter dans le portfolio</div>
+    </div>
+  </div>
+
+  <!-- ── Sommaire ── -->
+  <div class="panel" id="panel-sommaire">
+    <div class="content">
+      <div class="page-title">Sommaire</div>
+      <div class="page-subtitle">Vue d'ensemble des projets</div>
+
+      <div class="sem-label">Semestre 1</div>
+      <div class="sae-grid">
+        <div class="sae-card" data-target="s101">
+          <div class="sae-id">S1.01</div>
+          <div class="sae-title">Implémentation d'un réseau social fictif</div>
+          <div class="sae-sem">Python · Tableaux & Listes · En binôme</div>
+        </div>
+        <div class="sae-card" data-target="s102">
+          <div class="sae-id">S1.02</div>
+          <div class="sae-title">Comparaison d'algorithmes de tri</div>
+          <div class="sae-sem">Python · Performance · En binôme</div>
+        </div>
+        <div class="sae-card" data-target="s103">
+          <div class="sae-id">S1.03</div>
+          <div class="sae-title">Installation de poste (Xubuntu)</div>
+          <div class="sae-sem">Linux · Administration système · Individuel</div>
+        </div>
+        <div class="sae-card" data-target="s104">
+          <div class="sae-id">S1.04</div>
+          <div class="sae-title">Création d'une base de données</div>
+          <div class="sae-sem">SQL · MEA · Catastrophes naturelles · Individuel</div>
+        </div>
+        <div class="sae-card" data-target="s105">
+          <div class="sae-id">S1.05</div>
+          <div class="sae-title">Recueil de besoins à l'IUT</div>
+          <div class="sae-sem">Enquête · Analyse · En groupe de 8</div>
+        </div>
+        <div class="sae-card" data-target="s106">
+          <div class="sae-id">S1.06</div>
+          <div class="sae-title">Environnement économique & écologique</div>
+          <div class="sae-sem">OVHcloud · Data centers · En groupe de 4</div>
+        </div>
+      </div>
+
+      <div class="sem-label">Semestre 2</div>
+      <div class="sae-grid">
+        <div class="sae-card" data-target="s201">
+          <div class="sae-id">S2.01</div>
+          <div class="sae-title">Développement d'un jeu d'échecs</div>
+          <div class="sae-sem">Java · POO · En binôme</div>
+        </div>
+        <div class="sae-card" data-target="s205">
+          <div class="sae-id">S2.05</div>
+          <div class="sae-title">Gestion d'un projet de voyage</div>
+          <div class="sae-sem">Planification · Budget · En binôme</div>
+        </div>
+      </div>
+
+      <div class="sem-label">Semestre 3</div>
+      <div class="sae-grid">
+        <div class="sae-card" data-target="s301">
+          <div class="sae-id">S3.01</div>
+          <div class="sae-title">Développement de MusiQuali</div>
+          <div class="sae-sem">Flask · Python · SQLite · Raspberry Pi · En groupe de 6</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S1.01 ── -->
+  <div class="panel" id="panel-s101">
+    <div class="content">
+      <div class="page-title">S1.01 — Implémentation</div>
+      <div class="page-subtitle">Semestre 1 · Python · En binôme</div>
+
+      <p>Dans ce projet universitaire, réalisé en binôme, nous devions créer une simulation d'interactions entre des personnes fictives, à la manière d'un réseau social, en utilisant le langage de programmation Python.</p>
+      <p>Nous devions suivre un énoncé précis, dans lequel chaque question nous demandait d'implémenter une ou plusieurs fonctions répondant à une consigne spécifique. Par exemple, l'une des questions nous demandait :</p>
+
+      <blockquote>
+        Écrire une fonction <code>lecture_reseau_bis(path)</code> prenant en paramètre un chemin vers un fichier CSV et retournant un tableau modélisant les interactions entre les personnes du fichier, en éliminant les répétitions.
+      </blockquote>
+
+      <p>Cela nous a conduit à développer une fonction telle que :</p>
+
+<pre>def lecture_reseau_bis(path):
+    """
+    Modélise un tableau d'interactions à partir d'un fichier CSV,
+    en éliminant les répétitions d'interactions.
+
+    Argument :
+        path -- chemin d'accès vers un fichier CSV
+
+    Retour :
+        Liste d'interactions sans doublons.
+    """
+    tab_interactions = lecture_reseau(path)
+    tab_final_interactions = []
+
+    i = 0
+    while i < len(tab_interactions):
+        if verification(tab_final_interactions,
+                        tab_interactions[i],
+                        tab_interactions[i+1]):
+            tab_final_interactions.append(tab_interactions[i])
+            tab_final_interactions.append(tab_interactions[i+1])
+        i += 2
+    return tab_final_interactions</pre>
+
+      <p>Il y avait en tout 7 questions dans cette SAE. Lors de cette SAE on a travaillé et amélioré nos compétences sur le langage de programmation Python, plus précisément sur le concept des tableaux/listes et dictionnaires pour comprendre et analyser comment les valeurs agissent entre elles.</p>
+    </div>
+  </div>
+
+  <!-- ── S1.02 ── -->
+  <div class="panel" id="panel-s102">
+    <div class="content">
+      <div class="page-title">S1.02 — Comparaison d'algorithmes</div>
+      <div class="page-subtitle">Semestre 1 · Python · En binôme</div>
+
+      <p>Dans ce projet réalisé en binôme, nous devions programmer différentes fonctions de tri en Python, en lien avec les algorithmes étudiés en cours. Nous avons implémenté <strong>quatre algorithmes de tri</strong> : le tri à bulles, le tri par insertion, le tri par sélection, et le tri rapide (quicksort).</p>
+      <p>Ce projet était une suite logique du travail effectué lors de la SAE 1.01, et reprenait une structure similaire avec des consignes précises à respecter.</p>
+
+      <h2>Objectif</h2>
+      <p>L'objectif principal était d'implémenter ces algorithmes pour trier des utilisateurs fictifs, et d'ensuite <strong>mesurer les performances</strong> de chaque fonction afin de déterminer le tri le plus efficace selon les cas.</p>
+
+      <h2>Exemple de fonction chronométrée</h2>
+<pre>from time import *
+
+tic = time()  # Début du chronométrage
+
+def comu_dans_amis(comun, dico):
+    groupe = dico[comun[0]]
+    tri_popu(groupe, dico)
+    for i in groupe:
+        if sont_amis_de(i, comun, dico):
+            comun.append(i)
+    return comun
+
+tac = time()  # Fin du chronométrage
+
+print(round(1000 * (tac - tic), 2), "ms")</pre>
+
+      <p>On a appréhendé le concept de chronométrage d'une fonction/code et la réflexion sur la création d'un code pour permettre un tri efficace, tout ça dans le langage de programmation Python.</p>
+    </div>
+  </div>
+
+  <!-- ── S1.03 ── -->
+  <div class="panel" id="panel-s103">
+    <div class="content">
+      <div class="page-title">S1.03 — Installation de poste</div>
+      <div class="page-subtitle">Semestre 1 · Linux · Administration système</div>
+
+      <p>Dans ce projet, nous devions effectuer plusieurs tâches sur un ordinateur qui nous a été prêté pour l'année universitaire 2024-2025. Cet ordinateur était notre principal outil de travail, et nous devions le configurer afin qu'il soit entièrement fonctionnel pour le reste de l'année.</p>
+
+      <h2>Objectifs de la SAE</h2>
+      <p>L'objectif principal était de préparer un poste de travail sous Linux, et plus précisément sous <strong>Xubuntu</strong>, une distribution légère adaptée aux besoins des étudiants en informatique.</p>
+
+      <ul>
+        <li>Créer et configurer les <strong>partitions du disque dur</strong> pour accueillir le système</li>
+        <li>Installer <strong>Xubuntu (Linux)</strong> comme système d'exploitation principal</li>
+        <li>Configurer la <strong>connexion réseau</strong> pour accéder à Internet</li>
+        <li>Activer et tester un <strong>serveur web local</strong> (Apache ou Nginx)</li>
+        <li>Apprendre à <strong>naviguer dans les répertoires</strong> via le terminal</li>
+      </ul>
+
+      <h2>Compétences développées</h2>
+      <ul>
+        <li>L'installation complète d'un système Linux</li>
+        <li>La compréhension des partitions système (swap, /, /home…)</li>
+        <li>La configuration réseau (filaire ou Wi-Fi)</li>
+        <li>L'utilisation du terminal Linux (commandes de base, droits d'accès, navigation…)</li>
+        <li>La mise en place d'un serveur local et la structure d'un répertoire web</li>
+      </ul>
+
+      <h2>Pourquoi Linux ?</h2>
+      <p>Nous avons utilisé Xubuntu car c'est un système open source, gratuit, modifiable et adapté aux apprentissages. Il est largement utilisé dans le domaine de l'informatique professionnelle (administration système, développement, cybersécurité…) et offre une grande flexibilité pour les configurations personnalisées et le travail en ligne de commande.</p>
+    </div>
+  </div>
+
+  <!-- ── S1.04 ── -->
+  <div class="panel" id="panel-s104">
+    <div class="content">
+      <div class="page-title">S1.04 — Création d'une base de données</div>
+      <div class="page-subtitle">Semestre 1 · SQL · MEA · Individuel</div>
+
+      <p>Ce projet individuel, plus complexe que les précédents, portait sur la <strong>création et l'alimentation d'une base de données</strong>. Le thème de la base portait sur les catastrophes naturelles survenues dans différents pays.</p>
+
+      <h2>Objectifs de la SAE</h2>
+      <ul>
+        <li>Modélisation graphique à l'aide d'un <strong>AGL</strong>, avec la réalisation d'un <strong>MEA (Modèle Entité-Association)</strong></li>
+        <li>Traduction du MEA en <strong>modèle relationnel</strong></li>
+        <li>Création des <strong>tables SQL</strong> correspondantes</li>
+        <li>Peuplement des tables, manuellement ou via un fichier de données</li>
+      </ul>
+
+      <h2>Script SQL de création des tables</h2>
+<pre>CREATE TABLE region (
+    region_code INTEGER PRIMARY KEY,
+    name VARCHAR
+);
+
+CREATE TABLE sub_region (
+    sub_region_code INTEGER PRIMARY KEY,
+    name VARCHAR,
+    region_code INTEGER REFERENCES region(region_code)
+);
+
+CREATE TABLE country (
+    country_code INTEGER PRIMARY KEY,
+    name VARCHAR,
+    ISO2 CHAR(2),
+    ISO3 CHAR(3),
+    sub_region_code INTEGER REFERENCES sub_region(sub_region_code)
+);
+
+CREATE TABLE disaster (
+    disaster_code INTEGER PRIMARY KEY,
+    disaster VARCHAR
+);
+
+CREATE TABLE event (
+    country_code INTEGER REFERENCES country(country_code),
+    disaster_code INTEGER REFERENCES disaster(disaster_code),
+    year INTEGER,
+    number INTEGER,
+    PRIMARY KEY (country_code, disaster_code, year)
+);</pre>
+
+      <p>Ce projet nous a permis de voir et mieux comprendre toutes les étapes de la création d'une table, tant théoriques avec les représentations graphiques que pratiques avec les requêtes de création et de peuplement des tables.</p>
+    </div>
+  </div>
+
+  <!-- ── S1.05 ── -->
+  <div class="panel" id="panel-s105">
+    <div class="content">
+      <div class="page-title">S1.05 — Recueil de besoins</div>
+      <div class="page-subtitle">Semestre 1 · Enquête & Analyse · En groupe de 8</div>
+
+      <p>Dans ce projet, nous étions répartis en groupes de huit personnes. L'objectif principal était d'améliorer l'espace dédié à la vie étudiante et à la formation au sein de l'IUT de Sorbonne Paris Nord à Villetaneuse.</p>
+
+      <h2>Objectif du projet</h2>
+      <p>Le but était de réfléchir, en groupe, aux problématiques rencontrées au sein de l'IUT. Pour cela, nous avons procédé par étapes :</p>
+      <ol>
+        <li>Brainstorming pour identifier un maximum d'idées et de problèmes potentiels</li>
+        <li>Sélection des problématiques les plus pertinentes à transformer en questions de sondage</li>
+        <li>Rédaction et diffusion d'un formulaire auprès des étudiants de l'IUT</li>
+        <li>Analyse des réponses</li>
+        <li>Rédaction d'un rapport synthétisant les résultats et les axes d'amélioration proposés</li>
+      </ol>
+
+      <h2>Exemples de questions du formulaire</h2>
+
+      <div class="info-card">
+        <h3>1. Accessibilité</h3>
+        <p style="margin:0"><strong>Les dispositifs pour les personnes à mobilité réduite sont-ils suffisants ?</strong><br>
+        Oui, complètement · Partiellement suffisant · Pas suffisant · Je ne sais pas</p>
+      </div>
+      <div class="info-card">
+        <h3>2. Écologie</h3>
+        <p style="margin:0"><strong>Les pratiques actuelles en matière d'écologie à l'IUT vous paraissent-elles suffisantes ?</strong><br>
+        Très satisfaisantes · Satisfaisantes · Moyennement satisfaisantes · Insatisfaisantes</p>
+      </div>
+      <div class="info-card">
+        <h3>3. Équilibre théorie / pratique</h3>
+        <p style="margin:0"><strong>Pensez-vous que le programme offre un bon équilibre entre la théorie et la pratique ?</strong><br>
+        Oui, tout à fait · Plutôt oui · Plutôt non · Non, pas du tout</p>
+      </div>
+
+      <blockquote>Le questionnaire complet comportait <strong>21 questions</strong>, mêlant QCM et questions ouvertes pour recueillir à la fois des données quantitatives et des retours qualitatifs.</blockquote>
+
+      <h2>Compétences développées</h2>
+      <ul>
+        <li>Analyser un environnement réel avec un regard critique</li>
+        <li>Travailler en groupe élargi (8 personnes) avec rigueur et communication</li>
+        <li>Créer un questionnaire pertinent et structuré</li>
+        <li>Synthétiser les résultats et proposer des pistes d'amélioration concrètes</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── S1.06 ── -->
+  <div class="panel" id="panel-s106">
+    <div class="content">
+      <div class="page-title">S1.06 — Environnement économique & écologique</div>
+      <div class="page-subtitle">Semestre 1 · OVHcloud · En groupe de 4</div>
+
+      <p>Dans cette SAE, nous avons dû réfléchir à l'impact environnemental du secteur informatique, en particulier à l'empreinte numérique générée par une entreprise technologique. Les consignes étant volontairement assez vagues, nous avons pu choisir librement notre axe de travail.</p>
+
+      <h2>Sujet choisi</h2>
+      <p>Notre groupe de quatre personnes a décidé de se pencher sur le cas d'une entreprise de <strong>data centers</strong>, ces infrastructures très consommatrices en énergie. Nous avons travaillé sur la société <strong>OVHcloud</strong>, un acteur majeur du cloud computing et de l'hébergement web en Europe.</p>
+
+      <p>Nous avons rédigé un rapport d'analyse sur :</p>
+      <ul>
+        <li>Le fonctionnement d'un data center</li>
+        <li>La consommation énergétique de ces structures</li>
+        <li>Les moyens actuels mis en œuvre par OVHcloud</li>
+        <li>Des propositions d'amélioration pour réduire leur empreinte carbone</li>
+      </ul>
+
+      <h2>Extrait du rapport – Pistes d'amélioration</h2>
+      <blockquote>
+        Pour les bâtiments des data centers dont le ciel n'est pas couvert, ils peuvent installer sur leurs toits ou à proximité des panneaux solaires. Si leur position est proche de l'océan, ils peuvent utiliser des hydroliennes. Et si OVHcloud a un surplus d'énergie, alors ils peuvent la revendre. En retour, ils peuvent importer de l'énergie comme le nucléaire, qui est la source d'énergie la plus efficace et durable. On pourrait rapprocher les data centers des centres nucléaires afin d'utiliser pleinement l'énergie produite pour alimenter leurs serveurs.
+      </blockquote>
+
+      <h2>Compétences développées</h2>
+      <ul>
+        <li>Comprendre les enjeux énergétiques et environnementaux liés à l'industrie numérique</li>
+        <li>Faire une recherche autonome sur une entreprise réelle</li>
+        <li>Proposer des solutions concrètes et argumentées pour limiter l'impact écologique</li>
+        <li>Travailler en équipe sur un sujet transversal mêlant informatique, écologie, et économie</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── S2.01 ── -->
+  <div class="panel" id="panel-s201">
+    <div class="content">
+      <div class="page-title">S2.01 — Développement d'une application</div>
+      <div class="page-subtitle">Semestre 2 · Java · POO · En binôme</div>
+
+      <p>Dans cette SAE, nous avions pour objectif de développer un <strong>jeu d'échecs en Java</strong>, en binôme, à partir de zéro. Ce projet représentait un véritable défi, car nous n'étions pas guidés étape par étape : seules quelques classes étaient imposées par l'énoncé, sans aide sur leur contenu ni sur leur articulation.</p>
+
+      <h2>Objectifs du projet</h2>
+      <ul>
+        <li>Travailler en programmation orientée objet (POO)</li>
+        <li>Concevoir un jeu complet, fonctionnel, et modulaire</li>
+        <li>Gérer les règles du jeu d'échecs, le déplacement des pièces, et les interactions entre classes</li>
+        <li>Développer (si possible) une interface graphique, même rudimentaire</li>
+      </ul>
+
+      <h2>Les difficultés rencontrées</h2>
+      <p>Dès le début du projet, nous avons identifié deux grandes difficultés :</p>
+      <ol>
+        <li>La <strong>gestion de nombreuses classes interconnectées</strong> (12 au total)</li>
+        <li>L'<strong>affichage graphique</strong> : aucune notion d'interface graphique ne nous avait été enseignée à ce moment-là</li>
+      </ol>
+      <p>Malheureusement, nous n'avons pas pu finaliser le projet. Le jeu n'est pas exécutable en l'état, mais nous avons tout de même implémenté une grande partie de la logique du jeu.</p>
+
+      <h2>Extrait — Constructeur de la classe <code>Echiquier</code></h2>
+<pre>public class Echiquier {
+
+    private Case[][] echiquier = new Case[8][8];
+
+    public Echiquier() {
+        for (int i = 0; i < 8; i++) {
+            for (int y = 0; y < 8; y++) {
+                echiquier[i][y] = new Case(i, y);
+            }
+        }
+        // Pièces noires
+        echiquier[0][0].setPiece(new Tour("Noir", echiquier[0][0]));
+        echiquier[0][1].setPiece(new Cavalier("Noir", echiquier[0][1]));
+        echiquier[0][2].setPiece(new Fou("Noir", echiquier[0][2]));
+        echiquier[0][3].setPiece(new Dame("Noir", echiquier[0][3]));
+        echiquier[0][4].setPiece(new Roi("Noir", echiquier[0][4]));
+        // ...
+        for (int z = 0; z < 8; z++) {
+            echiquier[1][z].setPiece(new Pion("Noir", echiquier[1][z]));
+        }
+        // Pièces blanches
+        echiquier[7][0].setPiece(new Tour("Blanc", echiquier[7][0]));
+        // ...
+        for (int z = 0; z < 8; z++) {
+            echiquier[6][z].setPiece(new Pion("Blanc", echiquier[6][z]));
+        }
+    }
+}</pre>
+
+      <h2>Compétences acquises</h2>
+      <ul>
+        <li>Renforcer notre compréhension de la programmation orientée objet en Java</li>
+        <li>Apprendre à organiser un projet complexe en plusieurs classes</li>
+        <li>Travailler sur des structures logiques poussées (déplacements, règles de jeu…)</li>
+        <li>Apprendre à manier GitHub et le travail en équipe</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── S2.05 ── -->
+  <div class="panel" id="panel-s205">
+    <div class="content">
+      <div class="page-title">S2.05 — Gestion d'un projet</div>
+      <div class="page-subtitle">Semestre 2 · Planification · Budget · En binôme</div>
+
+      <p>Dans le cadre de cette SAE, nous avons travaillé en binôme sur un projet de <strong>planification d'un voyage</strong> pour les membres du club étudiant "Explorateurs 2.0". L'objectif était d'organiser un séjour découverte de 5 jours, intégrant des activités culturelles et sportives, tout en respectant un <strong>budget limité</strong>.</p>
+
+      <h2>Contexte du projet</h2>
+      <p>Nous devions choisir une région de France parmi trois propositions : La Bretagne, Les Alpes, ou Bordeaux et ses environs. Une fois la destination choisie, nous devions organiser tous les aspects logistiques et financiers :</p>
+      <ul>
+        <li>Le transport (essence, péages, location de véhicules…)</li>
+        <li>L'hébergement (hôtels, auberges…)</li>
+        <li>Les repas</li>
+        <li>Les activités culturelles et sportives</li>
+        <li>Le respect du budget global imposé</li>
+      </ul>
+
+      <h2>Extrait du rapport – Introduction</h2>
+      <blockquote>
+        Le club "Explorateurs 2.0" de l'IUT décide de réaliser un séjour découverte de 5 jours en mai, du 15 au 20 mai, pendant les vacances de printemps. L'objectif est de découvrir une nouvelle région de France, de renforcer la cohésion entre les membres du club, et de proposer des activités variées et enrichissantes. Quinze des vingt membres du club ont confirmé leur présence à ce séjour.
+      </blockquote>
+
+      <h2>Compétences développées</h2>
+      <ul>
+        <li>Se confronter à une situation de gestion de projet réaliste</li>
+        <li>Gérer des ressources humaines, matérielles et budgétaires</li>
+        <li>Collaborer en binôme, en prenant des décisions et en trouvant des compromis</li>
+        <li>Développer le sens de l'organisation, de la rigueur et de la planification</li>
+        <li>Réagir face aux imprévus et structurer un projet de A à Z</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+      <p>Cette SAE nous a offert un aperçu concret de la gestion de projet, dans un cadre à la fois réaliste et actif. Elle nous a fait comprendre l'importance de la préparation, de la planification et de la prise de décision en équipe.</p>
+    </div>
+  </div>
+
+  <!-- ── S3.01 ── -->
+  <div class="panel" id="panel-s301">
+    <div class="content">
+      <div class="page-title">S3.01 — Développement d'une application</div>
+      <div class="page-subtitle">Semestre 3 · Flask · Python · SQLite · Raspberry Pi · En groupe de 6</div>
+
+      <p>Lors de cette SAE de 6 personnes, le but était de réaliser un site qui permet de planifier et faire jouer des musiques à distance. Ce projet est visé pour le personnel du magasin pour permettre de mettre des musiques de fond. Il y a trois groupes présents dans le personnel visé, le <strong>marketing</strong>, le <strong>commercial</strong> et l'<strong>administrateur</strong>. Chaque rôle a ses actions propres.</p>
+
+      <p>Ce projet est le plus gros que j'ai reçu et le seul durant le troisième semestre. Et c'est compréhensible, car les tâches demandées n'ont pas été faciles et demandaient beaucoup d'autonomie pour apprendre de nouvelles connaissances pour le réaliser.</p>
+
+      <hr>
+
+      <h2>Énoncé du sujet</h2>
+      <blockquote>
+        Dans beaucoup d'organisations (entreprises, collectivités, gares, campus…), il faut assurer une diffusion musicale continue, avec insertion de messages publicitaires et possibilité de lancer des messages urgents. L'enjeu est de garantir la continuité de service : même en cas de coupure réseau, il doit toujours y avoir de la musique qui joue. La supervision permet en plus de vérifier que chaque lecteur est bien en fonctionnement et que ses playlists de secours sont correctement synchronisées.
+      </blockquote>
+
+      <h2>Objectifs du projet</h2>
+
+      <h3>Commercial</h3>
+      <ul>
+        <li>Faire le planning de diffusion musicale</li>
+        <li>Ajouter des playlists dans le planning</li>
+        <li>Lancer des messages urgents</li>
+      </ul>
+
+      <h3>Marketing</h3>
+      <ul>
+        <li>Créer des playlists</li>
+        <li>Ajouter et supprimer des musiques</li>
+        <li>Voir, rechercher et trier/filtrer les musiques</li>
+        <li>Voir, rechercher et trier/filtrer les playlists</li>
+        <li>Voir, rechercher et trier/filtrer les messages</li>
+      </ul>
+
+      <h3>Admin IT</h3>
+      <ul>
+        <li>Accéder au panel d'administration</li>
+        <li>Gérer les utilisateurs (ajouter, supprimer, rechercher, trier/filtrer)</li>
+        <li>Modifier le mot de passe des utilisateurs</li>
+        <li>Gérer les lecteurs (ajouter, supprimer, rechercher, trier/filtrer)</li>
+        <li>Suivre l'état des lecteurs (UP/KO)</li>
+        <li>Consulter les logs des lecteurs</li>
+      </ul>
+
+      <h3>Modérateur</h3>
+      <ul>
+        <li>Voir toutes les entreprises</li>
+        <li>Ajouter et supprimer des lecteurs par entreprise</li>
+      </ul>
+
+      <h3>Tous les utilisateurs connectés</h3>
+      <ul>
+        <li>Se connecter à l'application</li>
+      </ul>
+
+      <hr>
+
+      <h2>Les difficultés rencontrées</h2>
+
+      <h3>Côté groupe</h3>
+      <ol>
+        <li>Comprendre la mise en situation de l'énoncé pour savoir exactement ce qui était demandé</li>
+        <li>Se répartir les tâches équitablement entre 6 personnes</li>
+      </ol>
+
+      <h3>Côté personnel</h3>
+      <ol>
+        <li>Trouver des solutions pour résoudre les problèmes</li>
+        <li>Arriver à gérer des membres du groupe qui étaient passifs à l'avancement du projet</li>
+        <li>Arriver à gérer le temps pour rendre le projet à temps</li>
+        <li>Difficulté matérielle, mon ordinateur n'était pas assez puissant pour lancer le code fluidement et ralentissait énormément lors du lancement d'une machine virtuelle (qui représente le lecteur)</li>
+      </ol>
+
+      <hr>
+
+      <h2>Compétences techniques utilisées</h2>
+      <ul>
+        <li>Mise en place des user stories pour la base de données</li>
+        <li>Création diagramme de cas d'utilisation</li>
+        <li>Création du MEA</li>
+        <li>Modélisation du schéma relationnel</li>
+        <li>Création du repository GitHub</li>
+        <li>Utilisation du langage Python</li>
+        <li>Utilisation du micro-framework Flask</li>
+        <li>Manipulation d'une base de données avec SQL (SQLite)</li>
+        <li>Utilisation du protocole SSH (Secure SHell) et rsync</li>
+        <li>Utilisation du langage HTML, CSS et JavaScript</li>
+        <li>Développement en architecture DAO / Service / Controller</li>
+      </ul>
+
+      <h2>Compétences transversales utilisées</h2>
+      <ul>
+        <li>Création d'un serveur Discord pour communiquer en équipe</li>
+        <li>Agir en tant que chef de groupe (désigné par les autres membres)</li>
+        <li>Faire des ajustements finaux d'un cahier des charges</li>
+        <li>Création de la matrice RACI</li>
+        <li>Documentation régulière de l'avancement dans le journal de bord</li>
+        <li>Création d'un diagramme de Gantt théorique et réel pour comparer l'avancement</li>
+      </ul>
+
+      <hr>
+
+      <h2>Piste d'améliorations</h2>
+      <p>Je ne peux pas dire que je suis complètement satisfait de la finalité du projet car il manquait certaines fonctionnalités, telles que la possibilité de récupérer les logs du lecteur. Je voulais aussi que le site puisse interagir avec un autre lecteur (ordinateur) au lieu d'une machine virtuelle mais je n'y avais pas réussi.</p>
+      <p>Pour améliorer ce projet, il faut d'abord que je me renseigne plus pour trouver une solution sur comment faire en sorte que le protocole SSH puisse réellement communiquer avec un autre ordinateur, et que je puisse récupérer les logs générés depuis celui-ci. Je voudrais aussi améliorer les dispositions des boutons concernant les lecteurs en HTML.</p>
+      <p>J'ai remarqué qu'à la fin je devais me dépêcher de finir mon travail car la date de rendu était proche. Pour éviter cela je devrais mieux gérer mon temps. J'ai utilisé beaucoup de mon temps à lire des documentations pour trouver ce qu'il me fallait, mais maintenant que je sais, ça sera bien plus simple pour avancer.</p>
+    </div>
+  </div>
+
+</div><!-- /.main -->
+
+<script>
+  // Navigation
+  const navItems = document.querySelectorAll('.nav-item[data-target], .sae-card[data-target]');
+  const panels = document.querySelectorAll('.panel');
+  const breadcrumb = document.getElementById('breadcrumb');
+
+  const labels = {
+    presentation: 'Présentation',
+    sommaire: 'Sommaire',
+    s101: 'S1.01 — Implémentation',
+    s102: 'S1.02 — Comparaison d\'algos',
+    s103: 'S1.03 — Installation de poste',
+    s104: 'S1.04 — Création d\'une BD',
+    s105: 'S1.05 — Recueil de besoins',
+    s106: 'S1.06 — Environnement éco.',
+    s201: 'S2.01 — Développement app',
+    s205: 'S2.05 — Gestion de projet',
+    s301: 'S3.01 — Développement app',
+  };
+
+  function navigate(target) {
+    // Hide all panels
+    panels.forEach(p => p.classList.remove('active'));
+    // Deactivate all nav items
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    // Show target panel
+    const panel = document.getElementById('panel-' + target);
+    if (panel) panel.classList.add('active');
+
+    // Activate nav item
+    const navItem = document.querySelector('.nav-item[data-target="' + target + '"]');
+    if (navItem) navItem.classList.add('active');
+
+    // Update breadcrumb
+    breadcrumb.textContent = labels[target] || target;
+
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => navigate(item.dataset.target));
+  });
+
+  // Theme toggle
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const themeLabel = document.getElementById('themeLabel');
+  let isDark = true;
+
+  themeToggle.addEventListener('click', () => {
+    isDark = !isDark;
+    root.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    themeIcon.textContent = isDark ? '☀' : '🌙';
+    themeLabel.textContent = isDark ? 'Clair' : 'Sombre';
+  });
+</script>
+</body>
+</html>
