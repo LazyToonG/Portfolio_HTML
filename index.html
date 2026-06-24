@@ -508,7 +508,7 @@
 
     <div class="nav-section-label">Semestre 2</div>
     <div class="nav-item" data-target="s201">
-      <span>♟</span> S2.01 — Développement app
+      <span></span> S2.01 — Développement app
     </div>
     <div class="nav-item" data-target="s205">
       <span></span> S2.05 — Gestion de projet
@@ -517,13 +517,13 @@
     <div class="nav-section-label">Semestre 3</div>
     <div class="nav-item" data-target="s301">
       <span></span> S3.01 — Développement app
-      <span class="badge">Flask</span>
+      <span class="badge">Musiqualy - Flask</span>
     </div>
 
     <div class="nav-section-label">Semestre 4</div>
     <div class="nav-item" data-target="s401">
       <span></span> S4.01 — Développement app
-      <span class="badge">MusiQuali</span>
+      <span class="badge">MusiQuali - Flask</span>
     </div>
   </div>
 
@@ -1144,6 +1144,120 @@ CREATE TABLE event (
       <p>J'ai remarqué qu'à la fin je devais me dépêcher de finir mon travail car la date de rendu était proche. Pour éviter cela je devrais mieux gérer mon temps. J'ai utilisé beaucoup de mon temps à lire des documentations pour trouver ce qu'il me fallait, mais maintenant que je sais, ça sera bien plus simple pour avancer.</p>
     </div>
   </div>
+  <!-- ── S4.01 ── -->
+  <div class="panel" id="panel-s401">
+  <div class="content">
+    <div class="page-title">S4.01 — Développement d'une application</div>
+    <div class="page-subtitle">Semestre 4 · Flask · Python · SQLite · Architecture Multi-Tenant · En groupe de 5</div>
+
+    <p>Lors de cette SAE de 5 personnes, le but était de réaliser une application web multi-tenant permettant de planifier et diffuser des musiques à distance sur des lecteurs Raspberry Pi installés dans des entreprises. Ce projet, nommé <strong>MusiQuali</strong>, est destiné au personnel de magasins souhaitant gérer une ambiance sonore. Trois rôles sont présents : le <strong>marketing</strong> qui gère les playlists et les musiques, le <strong>commercial</strong> qui planifie la diffusion sur un planning hebdomadaire, et l'<strong>administrateur</strong> qui gère les utilisateurs et les lecteurs Raspberry Pi.</p>
+
+    <p>Ce projet est la continuité directe de la S3.01, mais à un niveau nettement plus avancé. Les fonctionnalités demandées étaient plus complexes, l'architecture plus rigoureuse, et l'autonomie attendue bien plus grande, notamment pour tout ce qui touchait au déploiement réseau et à la communication avec les Raspberry Pi.</p>
+
+    <hr>
+
+    <h2>Énoncé du sujet</h2>
+    <blockquote>
+      L'objectif de cette SAE est de terminer le travail entrepris en S3 pour développer un produit fini. De manière à ne pas pénaliser certains étudiants, on peut ne pas repartir de son propre travail s'il n'est pas jugé comme un bon point de départ, et on peut reprendre le travail de S3 d'autres équipes.
+    </blockquote>
+
+    <h2>Objectifs du projet</h2>
+
+    <h3>Commercial</h3>
+    <ul>
+      <li>Faire le planning de diffusion musicale</li>
+      <li>Ajouter des playlists dans le planning</li>
+      <li>Lancer des messages urgents</li>
+    </ul>
+
+    <h3>Marketing</h3>
+    <ul>
+      <li>Créer des playlists</li>
+      <li>Ajouter et supprimer des musiques</li>
+      <li>Voir, rechercher et trier/filtrer les musiques</li>
+      <li>Voir, rechercher et trier/filtrer les playlists</li>
+      <li>Voir, rechercher et trier/filtrer les messages</li>
+    </ul>
+
+    <h3>Admin IT</h3>
+    <ul>
+      <li>Accéder au panel d'administration</li>
+      <li>Gérer les utilisateurs (ajouter, supprimer, rechercher, trier/filtrer)</li>
+      <li>Modifier le mot de passe des utilisateurs</li>
+      <li>Gérer les lecteurs (ajouter, supprimer, rechercher, trier/filtrer)</li>
+      <li>Suivre l'état des lecteurs (UP/KO)</li>
+      <li>Consulter les logs des lecteurs</li>
+    </ul>
+
+    <h3>Modérateur</h3>
+    <ul>
+      <li>Voir toutes les entreprises</li>
+      <li>Ajouter et supprimer des lecteurs par entreprise</li>
+    </ul>
+
+    <h3>Tous les utilisateurs connectés</h3>
+    <ul>
+      <li>Se connecter à l'application</li>
+    </ul>
+
+    <hr>
+
+    <h2>Les difficultés rencontrées</h2>
+
+    <h3>Côté groupe</h3>
+    <ol>
+      <li>Continuer un projet déjà commencé</li>
+      <li>Maintenir une cohérence entre les développements parallèles (frontend, backend, base de données, Raspberry Pi)</li>
+      <li>Gérer les membres moins actifs sans bloquer l'avancement global</li>
+    </ol>
+
+    <h3>Côté personnel</h3>
+    <ol>
+      <li>Comprendre et mettre en place une architecture multi-tenant rigoureuse (isolation des données par entreprise à travers toutes les couches DAO/Service/Controller)</li>
+      <li>Maîtriser la communication SSH et rsync pour déployer les fichiers sur les Raspberry Pi</li>
+      <li>Déboguer des problèmes complexes de synchronisation (fichiers JSON vides reçus côté Raspberry, scripts non déclenchés à distance)</li>
+      <li>Apprendre à gérer correctement les chemins de fichiers en Python pour éviter les bugs selon l'environnement d'exécution</li>
+      <li>Gérer le temps face à la densité des fonctionnalités demandées</li>
+      <li>Gérer les processus s'exécutant dans les lecteurs</li>
+      <li>Gérer les liens d'intégrité entre les informations dans la base de données</li>
+    </ol>
+
+    <hr>
+
+    <h2>Compétences techniques utilisées</h2>
+    <ul>
+      <li>Architecture MVC étendue en DAO / Service / Controller / Templates</li>
+      <li>Développement backend en Python avec le micro-framework Flask</li>
+      <li>Utilisation de Jinja2 pour l'injection dynamique de variables dans les templates HTML</li>
+      <li>Manipulation d'une base de données SQLite avec création automatique des tables</li>
+      <li>Développement multi-tenant avec isolation des données par <code>idEntreprise</code></li>
+      <li>Utilisation du protocole SSH et de rsync pour le déploiement sur Raspberry Pi</li>
+      <li>Génération et déploiement de fichiers de configuration JSON</li>
+      <li>Développement d'une API REST (endpoints JSON pour le statut des lecteurs et les logs)</li>
+      <li>Utilisation de JavaScript et <code>fetch()</code> pour le rafraîchissement dynamique (AJAX)</li>
+      <li>Utilisation des langages HTML, CSS et JavaScript côté frontend</li>
+      <li>Gestion de logs applicatifs avec un DAO dédié (<code>INSERT OR IGNORE</code> pour l'idempotence)</li>
+      <li>Utilisation de Git pour le versionnage et la collaboration en équipe</li>
+      <li>Mise en place du protocole HTTPS pour la sécurisation des flux</li>
+    </ul>
+
+    <h2>Compétences transversales utilisées</h2>
+    <ul>
+      <li>Agir en tant que chef de groupe (désigné par les autres membres)</li>
+      <li>Création et suivi d'un diagramme de Gantt théorique et réel</li>
+      <li>Rédaction d'un cahier des charges et des user stories</li>
+      <li>Création du diagramme de cas d'utilisation et du schéma relationnel (MEA)</li>
+      <li>Création d'une matrice des risques</li>
+      <li>Documentation régulière de l'avancement dans un journal de bord</li>
+      <li>Communication via Discord pour le partage d'informations et de ressources</li>
+    </ul>
+
+    <hr>
+
+    <h2>Pistes d'amélioration</h2>
+    <p>Le site et la base de données pourraient être mis en ligne, ce qui était l'un des objectifs que je souhaitais atteindre au début de ce projet, mais que je n'ai pas pu réaliser en raison du manque de temps. Effectivement, je suis capable de le faire en utilisant mes compétences acquises pendant mon stage. Cependant, si le site est mis en ligne, il sera hébergé gratuitement sur un hébergeur sans nom de domaine personnalisé.</p>
+  </div>
+</div>
 
 </div><!-- /.main -->
 
